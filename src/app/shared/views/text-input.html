@@ -1,0 +1,56 @@
+<div class="form-group" style="position: relative">
+  <label for="{{label}}" class="mb-1"><strong>{{label}}</strong></label>
+  <input
+    [type]="type"
+    [ngClass]="(controlDir && controlDir.control
+  && !controlDir.control.valid && controlDir.control.touched)? !controlDir.control.valid?
+  'is-invalid': 'is-valid' : ''"
+    (input)="onChange($event.target.value)"
+    id="{{label}}"
+    (blur)="onTouched()"
+    #input
+    class="form-control"
+    placeholder="{{label}}"
+  />
+  <div
+    *ngIf="controlDir &&
+  controlDir.control && controlDir.control.status==='PENDING'"
+    class="fa fa-spinner fa-spin loader"
+  ></div>
+  <div
+    class="text-danger"
+    *ngIf="(controlDir && controlDir.control
+   && !controlDir.control.valid && controlDir.control.touched)"
+  >
+    <span *ngIf="controlDir.control.errors?.required"
+      >{{label}} is required</span
+    >
+    <span *ngIf="controlDir.control.errors?.pattern">{{label}} is Invalid</span>
+    <span *ngIf="controlDir.control.errors?.email">Invalid email address</span>
+    <span *ngIf="controlDir.control.errors?.minlength">
+      {{label}} must be at least
+      {{controlDir.control.errors?.minlength['requiredLength']}} characters
+    </span>
+    <span *ngIf="controlDir.control.errors?.maxlength">
+      {{label}} must be at most
+      {{controlDir.control.errors?.maxlength['requiredLength']}}
+    </span>
+  </div>
+  <div
+    class="text-danger"
+    *ngIf="(controlDir && controlDir.control
+  && !controlDir.control.valid && controlDir.control.dirty)"
+  >
+    <span *ngIf="controlDir.control.errors?.emailExists"
+      >Email Already Taken</span
+    >
+    <!-- <span *ngIf="!controlDir.control.errors?.accountExists">Invalid AccountNumber</span> -->
+  </div>
+  <!-- <div class="alert alert-danger alert-dismissible fade show" *ngIf="username?.invalid && (username?.dirty || username?.touched)">
+      <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" class="mr-2"><polygon points="7.86 2 16.14 2 22 7.86 22 16.14 16.14 22 7.86 22 2 16.14 2 7.86 7.86 2"></polygon><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line></svg>
+      <span *ngIf="username?.errors?.required">Email is required</span>
+      <span *ngIf="username?.errors?.email">Invalid Email Address</span>
+      <button type="button" class="close h-100" data-dismiss="alert" aria-label="Close"><span><i class="mdi mdi-close"></i></span>
+      </button>
+  </div> -->
+</div>

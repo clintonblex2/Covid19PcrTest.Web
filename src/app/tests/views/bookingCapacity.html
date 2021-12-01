@@ -1,0 +1,158 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card box-margin">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-6">
+            <h4 class="card-title">Booking Capacity</h4>
+          </div>
+          <div class="col-6">
+            <button
+              type="button"
+              class="btn btn-primary pull-right"
+              (click)="allocateSpaceModal(template)"
+            >
+              Allocate new space
+            </button>
+          </div>
+        </div>
+
+        <div class="list-view table-responsive" id="list-view">
+          <table class="list-view__table display table">
+            <thead class="list-view__head">
+              <tr>
+                <th>Lab</th>
+                <th>Location</th>
+                <th>Schedule Date</th>
+                <th>Available Space</th>
+              </tr>
+            </thead>
+            <tbody class="list-view__body">
+              <tr *ngFor="let capacity of bookingCapacity">
+                <td>{{capacity.testLab}}</td>
+                <td>{{capacity.location}}</td>
+                <td>{{capacity.availableDate | date :'mediumDate'}}</td>
+                <td>{{capacity.openSlots}}</td>
+                <td>
+                  <div
+                    class="btn-group"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <button
+                      type="button"
+                      class="btn btn-primary"
+                      (click)="addMoreSpaceModal(template2,capacity.id)"
+                    >
+                      Add More Space
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Allocate New Space</h4>
+    <button
+      type="button"
+      class="btn-close close pull-right"
+      aria-label="Close"
+      (click)="modalRef?.hide()"
+    >
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="allocateSpace()">
+      <div class="form-group">
+        <label for="fullname"> Location</label>
+        <br />
+        <select
+          class="form-control"
+          (change)="getLabs()"
+          formControlName="locationId"
+        >
+          <option value="">Select Location</option>
+          <option *ngFor="let location of locations" value="{{location.id}}">
+            {{location.name}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group" *ngIf="labs.length > 0">
+        <label for="fullname">Lab</label>
+        <br />
+        <select class="form-control" formControlName="labId">
+          <option value="">Select Lab</option>
+          <option *ngFor="let lab of labs" value="{{lab.id}}">
+            {{lab.name}}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Schedule Date</label>
+        <div class="input-group">
+          <input
+            type="text"
+            class="form-control"
+            name="date"
+            #dp1="bsDatepicker"
+            bsDatepicker
+            [bsValue]="date"
+            [(ngModel)]="date"
+          />
+          <div class="input-group-append">
+            <span class="input-group-text" (click)="dp1.toggle()"
+              ><i class="fa fa-calendar"></i
+            ></span>
+          </div>
+        </div>
+      </div>
+      <text-input
+        formControlName="slot"
+        [label]="'AvailableSpace'"
+        [type]="'number'"
+      ></text-input>
+      <button type="submit" class="btn btn-primary" [disabled]="!form.valid">
+        Add Space
+      </button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #template2>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add More Space</h4>
+    <button
+      type="button"
+      class="btn-close close pull-right"
+      aria-label="Close"
+      (click)="modalRef?.hide()"
+    >
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form #f="ngForm" (ngSubmit)="addMoreSpace(f.value)">
+      <div class="form-group">
+        <label> Slot </label>
+        <input
+          type="number"
+          [(ngModel)]="availableSpace"
+          name="availableSpace"
+          class="form-control"
+        />
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="!f.valid">
+        Add More Space
+      </button>
+    </form>
+  </div>
+</ng-template>

@@ -1,0 +1,187 @@
+<div class="row">
+  <div class="col-12">
+    <div class="card box-margin">
+      <div class="card-body">
+        <div class="card-header">
+          <h4 class="card-title">Bookings</h4>
+          <div class="pull-right">
+            <button
+              class="btn btn-primary"
+              (click)="openFilterModal(filterTemplate)"
+            >
+              Filter
+            </button>
+          </div>
+        </div>
+        <div class="list-view table-responsive" id="list-view">
+          <table class="list-view__table display table">
+            <thead class="list-view__head">
+              <tr>
+                <th>Patient</th>
+                <th>Test</th>
+                <th>Lab</th>
+                <th>Location</th>
+                <th>Date</th>
+                <th>Status</th>
+                <th>Booking Code</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+
+            <tbody class="list-view__body">
+              <tr *ngFor="let booking of bookings">
+                <td>{{booking.firstName}},{{booking.lastName}}</td>
+                <td>{{booking.vaccineType}}</td>
+                <td>{{booking.testLab}}</td>
+                <td>{{booking.testLocation}}</td>
+                <td>{{booking.testDate | date:'mediumDate'}}</td>
+                <td>{{booking.bookingStatus}}</td>
+                <td>{{booking.bookingReference}}</td>
+                <td>
+                  <div
+                    class="btn-group"
+                    role="group"
+                    aria-label="Basic example"
+                  >
+                    <!-- <button type="button" class="btn btn-primary">View</button> -->
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                      (click)="openAddTestModal(template,booking)"
+                      [disabled]="booking.bookingStatus!='Booked'"
+                    >
+                      Add Result
+                    </button>
+                    <button
+                      type="button"
+                      class="btn btn-danger btn-sm"
+                      (click)="cancelBooking(booking)"
+                      [disabled]="booking.bookingStatus==='Confirmed' ||
+                      booking.bookingStatus==='Cancelled'"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="pull-right">
+            <pagination
+              [total-items]="totalCount"
+              [page-size]="query.pageSize"
+              (page-changed)="onPageChange($event)"
+            ></pagination>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Add Test Result</h4>
+    <button
+      type="button"
+      class="btn-close close pull-right"
+      aria-label="Close"
+      (click)="modalRef?.hide()"
+    >
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="form" (ngSubmit)="addTest()">
+      <div class="form-group">
+        <label>Result Type</label>
+        <select class="form-control" formControlName="resultType">
+          <option value="">Select Result Type</option>
+          <option value="1">Positive</option>
+          <option value="2">Negative</option>
+        </select>
+      </div>
+      <text-input formControlName="remarks" [label]="'Remarks'"></text-input>
+      <button type="submit" class="btn btn-primary" [disabled]="!form.valid">
+        Add Test
+      </button>
+    </form>
+  </div>
+</ng-template>
+
+<ng-template #filterTemplate>
+  <div class="modal-content">
+    <div class="modal-header">
+      <h6 class="modal-title" id="modal-title-notification">Filter By:</h6>
+      <button
+        type="button"
+        class="close"
+        data-dismiss="modal"
+        aria-label="Close"
+        (click)="modalRef.hide()"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form #f="ngForm" (ngSubmit)="onFilterChange()">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label>From</label>
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="startDate"
+                  #sd="ngModel"
+                  name="startDate"
+                  #dp="bsDatepicker"
+                  required
+                  bsDatepicker
+                  [bsValue]="startDate"
+                />
+                <div class="input-group-append">
+                  <span class="input-group-text" (click)="dp.toggle()"
+                    ><i class="fa fa-calendar"></i
+                  ></span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label>To</label>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="endDate"
+                #ed="ngModel"
+                name="endDate"
+                #dp1="bsDatepicker"
+                bsDatepicker
+                [bsValue]="endDate"
+              />
+              <div class="input-group-append">
+                <span class="input-group-text" (click)="dp1.toggle()"
+                  ><i class="fa fa-calendar"></i
+                ></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" [disabled]="!f.valid" class="btn btn-primary">
+          Apply Filter
+        </button>
+        <button
+          type="button"
+          (click)="resetFilter()"
+          class="btn btn-outline-primary"
+        >
+          Reset
+        </button>
+      </form>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,83 @@
+<div class="row h-100 align-items-center justify-content-center">
+  <div class="col-sm-10 col-md-7 col-lg-5">
+    <!-- Middle Box -->
+    <div class="middle-box">
+      <div class="card">
+        <div class="log-header-arae d-flex align-items-center p-4">
+          <!-- Logo -->
+          <h4 class="font-22 mb-0">Test Result</h4>
+        </div>
+        <div class="card-body p-4">
+          <form [formGroup]="form" (ngSubmit)="viewResult(template)">
+            <text-input
+              [type]="'text'"
+              [label]="'PhoneNumber'"
+              formControlName="phoneNumber"
+            ></text-input>
+            <text-input
+              [type]="'text'"
+              [label]="'Booking Reference'"
+              formControlName="bookingReference"
+            ></text-input>
+
+            <div class="form-group mb-0 mt-15">
+              <button
+                class="btn btn-primary btn-block"
+                type="submit"
+                [disabled]="!form.valid"
+              >
+                View Result
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left"></h4>
+    <button
+      type="button"
+      class="btn-close close pull-right"
+      aria-label="Close"
+      (click)="modalRef?.hide()"
+    >
+      <span aria-hidden="true" class="visually-hidden">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="list-view table-responsive" id="list-view">
+      <table class="list-view__table display table">
+        <tbody class="list-view__body">
+          <tr>
+            <td>Patient</td>
+            <td>{{testResult?.patientName}}</td>
+          </tr>
+          <tr>
+            <td>Lab</td>
+            <td>{{testResult?.testLab}}</td>
+          </tr>
+          <tr>
+            <td>Location</td>
+            <td>{{testResult?.testLocation}}</td>
+          </tr>
+          <tr>
+            <td>Date</td>
+            <td>{{testResult?.testDate | date:'mediumDate'}}</td>
+          </tr>
+          <tr>
+            <td>Result</td>
+            <td>{{testResult?.testResult}}</td>
+          </tr>
+          <tr>
+            <td>Booking Reference</td>
+            <td>{{testResult?.bookingReference}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-template>

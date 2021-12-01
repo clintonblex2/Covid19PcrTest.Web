@@ -1,0 +1,141 @@
+<div class="row h-100 align-items-center justify-content-center">
+  <div class="col-sm-10 col-md-7 col-lg-5">
+    <!-- Middle Box -->
+    <div class="middle-box">
+      <div class="card">
+        <div class="log-header-arae d-flex align-items-center p-4">
+          <!-- Logo -->
+          <h4 class="font-22 mb-0">Schedule A Test</h4>
+        </div>
+        <div class="card-body p-4">
+          <form [formGroup]="form" (ngSubmit)="scheduleTest()">
+            <div class="form-group">
+              <label for="fullname"> Vaccine Type</label>
+              <br />
+              <select
+                id="testTypeId"
+                name="testTypeId"
+                class="form-control"
+                formControlName="vaccineTypeId"
+              >
+                <option value="">Select Vaccine Type</option>
+                <option
+                  *ngFor="let testType of testTypes"
+                  value="{{testType.id}}"
+                >
+                  {{testType.name}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="fullname"> Location</label>
+              <br />
+              <select
+                class="form-control"
+                (change)="getLabs()"
+                formControlName="locationId"
+              >
+                <option value="">Select Location</option>
+                <option
+                  *ngFor="let location of locations"
+                  value="{{location.id}}"
+                >
+                  {{location.name}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group" *ngIf="labs.length > 0">
+              <label for="fullname">Lab</label>
+              <br />
+              <select
+                class="form-control"
+                formControlName="labId"
+                (change)="getTestDays()"
+              >
+                <option value="">Select Lab</option>
+                <option *ngFor="let lab of labs" value="{{lab.id}}">
+                  {{lab.name}}
+                </option>
+              </select>
+            </div>
+            <div class="form-group" *ngIf="testDays.length > 0">
+              <label for="fullname">Schedule Date</label>
+              <br />
+              <select class="form-control" formControlName="appointmentDayId">
+                <option value="">Select a Test Day</option>
+                <option *ngFor="let testDay of testDays" value="{{testDay.id}}">
+                  {{testDay.availableDate | date : 'mediumDate'}}
+                </option>
+              </select>
+            </div>
+            <text-input
+              [type]="'text'"
+              [label]="'FirstName'"
+              formControlName="firstName"
+            ></text-input>
+            <text-input
+              [type]="'text'"
+              [label]="'LastName'"
+              formControlName="lastName"
+            ></text-input>
+            <text-input
+              [type]="'text'"
+              [label]="'Email'"
+              formControlName="email"
+            ></text-input>
+            <text-input
+              [type]="'text'"
+              [label]="'PhoneNumber'"
+              formControlName="phoneNumber"
+            ></text-input>
+            <div class="form-group">
+              <label for="DateOfBirth">Date Of Birth</label>
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  formControlName="dateOfBirth"
+                  name="date"
+                  #dp1="bsDatepicker"
+                  bsDatepicker
+                  [bsValue]="date"
+                />
+                <div class="input-group-append">
+                  <span class="input-group-text" (click)="dp1.toggle()"
+                    ><i class="fa fa-calendar"></i
+                  ></span>
+                </div>
+              </div>
+            </div>
+            <div class="form-group">
+              <label for="gender">Gender</label>
+              <br />
+              <select class="form-control" formControlName="gender">
+                <option value="">Select Gender</option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
+            </div>
+            <div class="form-group mb-0 mt-15">
+              <button
+                class="btn btn-primary btn-block"
+                type="submit"
+                [disabled]="!form.valid"
+              >
+                Schedule a Test
+              </button>
+            </div>
+            <div class="text-center mt-15">
+              <span class="mr-2 font-13">Already done Test?</span
+              ><a
+                class="font-13 font-weight-bold"
+                [routerLink]="['../viewresult']"
+                >Check Test Result</a
+              >
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
